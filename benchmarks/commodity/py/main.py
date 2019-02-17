@@ -18,15 +18,14 @@ def time_it(func):
 
 
 def main():
-    output_file = "output/points-k.csv"
+    output_file = "../data/python.csv"
     nnodes = 4000
     nrepeats = 1
     k = 2
     nedges = int(nnodes * (nnodes-1) / 2)
     points = []
     calculate_asp_timed = time_it(calculate_asp)
-    # for nedges in range(1000, 10000, 500):
-    for nnodes in range(2000, 10000, 1000):
+    for nnodes in range(1000, 11000, 1000):
         nedges = nnodes * k
         measurements = []
         for _ in range(nrepeats):
