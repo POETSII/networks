@@ -1,6 +1,8 @@
 function plot_points
 
-points_py = csvread('output/points-k.csv');
+makePDF = 1;
+
+points_py = csvread('data/python.csv');
 points_java_algo1 = csvread('data/java-algo1.csv');
 points_java_algo2 = csvread('data/java-algo2.csv');
 
@@ -16,11 +18,21 @@ title('ASP Performance (Edges = 2 x Nodes)');
 
 grid on;
 
-legend('Python', 'Java (Algo 1)', 'Java (Algo 2)');
+legs = {'Python', 'Java (Algo 1)', 'Java (Algo 2)'};
+
+legend(legs, 'Location', 'NorthWest');
 
 box on;
 
 set(gca, 'yscale', 'log');
+
+if makePDF == 1
+
+    makeLines1pt();
+
+	ppdf2('results/plot_points.pdf', [12 8]);
+
+end
 
 end
 
