@@ -1,25 +1,36 @@
 function plot_points
 
-% points = csvread('output/points-2000-nodes.csv');
+points_py = csvread('output/points-k.csv');
+points_java_algo1 = csvread('data/java-algo1.csv');
+points_java_algo2 = csvread('data/java-algo2.csv');
 
-points = csvread('output/points-k.csv');
+clf; hold on;
 
-nnodes = points(:, 1);
-nedges = points(:, 2);
-asp_vals = points(:, 3:end);
-
-qs = quantile(asp_vals, [0.25 0.5 0.75], 2);
-
-plot(nnodes, qs);
+plot_set(points_py, 'r');
+plot_set(points_java_algo1, 'b');
+plot_set(points_java_algo2, [0 0.5 0]);
 
 xlabel('Nodes');
 ylabel('Time (sec)');
-title('ASP Performance');
+title('ASP Performance (Edges = 2 x Nodes)');
 
 grid on;
 
-legend('0.25 quantile', 'mean', '0.75 quantile');
+legend('Python', 'Java (Algo 1)', 'Java (Algo 2)');
 
-% xlim([0 5]);
+box on;
+
+set(gca, 'yscale', 'log');
+
+end
+
+function plot_set(points, col)
+
+nnodes = points(:, 1);
+% nedges = points(:, 2);
+time = points(:, 3:end);
+
+
+plot(nnodes, time, '-o', 'color', col);
 
 end
