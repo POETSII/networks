@@ -1,3 +1,5 @@
+package com.xrbpowered.compute.asp;
+
 import java.security.InvalidParameterException;
 import java.util.Random;
 
