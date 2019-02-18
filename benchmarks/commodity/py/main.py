@@ -25,7 +25,7 @@ def main():
     nedges = int(nnodes * (nnodes-1) / 2)
     points = []
     calculate_asp_timed = time_it(calculate_asp)
-    for nnodes in range(1000, 11000, 1000):
+    for nnodes in range(1000, 21000, 1000):
         nedges = nnodes * k
         measurements = []
         for _ in range(nrepeats):
