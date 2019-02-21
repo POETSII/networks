@@ -1,0 +1,3 @@
+[submodule "tuura-api"]
+	path = tuura-api
+	url = https://github.com/tuura/tuura-api
