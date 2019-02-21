@@ -21,7 +21,7 @@ def main():
     output_file = "../data/python.csv"
     nnodes = 4000
     nrepeats = 1
-    k = 2
+    k = 10
     nedges = int(nnodes * (nnodes-1) / 2)
     points = []
     calculate_asp_timed = time_it(calculate_asp)
@@ -33,7 +33,7 @@ def main():
             asp, duration = calculate_asp_timed(graph)
             measurements.append(duration)
         point = (nnodes, nedges, *measurements)
-        # print(point)
+        print(point)
         points.append(point)
     write_csv(output_file, points)
 

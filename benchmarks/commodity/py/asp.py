@@ -39,6 +39,10 @@ def _calculate_asp_single_src(graph, src):
 
         current = destinations
 
+    nnodes = len(graph)
+
+    assert len(visited) == nnodes, "Graph is disconnected"
+
     nodes = list(graph)
     npaths = len(visited) - 1
     return sum_ / npaths
