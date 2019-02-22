@@ -13,11 +13,13 @@ public class Alg2 {
 		}
 	}
 	
-	public static double asp(Graph g) {
+	public static Double asp(Graph g, boolean verbose) {
 		long len = 0;
 		int nodes = 0;
 		
 		for(int n=0; n<g.nnodes; n++) {
+			if(verbose && n%1000==0)
+				System.out.println(n);
 			LinkedList<Token> tokens = new LinkedList<>();
 			boolean[] vis = new boolean[g.nnodes];
 			tokens.add(new Token(n, 0));
@@ -37,6 +39,8 @@ public class Alg2 {
 					}
 				}
 			}
+			if(n==0 && nodes!=g.nnodes-1)
+				return null; // not fully connected
 		}
 		
 		return len/(double)nodes;
