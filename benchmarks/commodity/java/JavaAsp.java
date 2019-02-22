@@ -5,7 +5,7 @@ public class JavaAsp {
 	public static boolean verbose = true;
 	
 	public static void test(int nnodes, int nedges, boolean alg1, boolean alg2) {
-		Graph g = Graph.create(nnodes, nedges);
+		Graph g = Graph.generateRandom(nnodes, nedges);
 		
 		long t0 = System.currentTimeMillis();
 		Double res1 = alg1 ? Alg1.asp(g, verbose) : Double.valueOf(0);
