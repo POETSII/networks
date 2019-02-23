@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -48,16 +47,11 @@ public class Graph {
 				System.out.printf("%d -> %d\n", i, map[i].edges[j]);
 	}
 	
-	public void printDegreeDistr() {
-		ArrayList<Integer> list = new ArrayList<>();
-		for(int i=0; i<nnodes; i++) {
-			int degree = map[i].nedges;
-			while(list.size()<degree+1)
-				list.add(0);
-			list.set(degree, list.get(degree)+1);
-		}
-		for(int i=0; i<list.size(); i++)
-			System.out.printf("%d, %d\n", i, list.get(i));
+	public DegreeDistr getDegreeDistr() {
+		DegreeDistr dd = new DegreeDistr();
+		for(int i=0; i<nnodes; i++)
+			dd.addTo(map[i].nedges);
+		return dd;
 	}
 	
 	public static Graph generateRandom(int nnodes, int nedges) {
@@ -125,9 +119,14 @@ public class Graph {
 	}
 	
 	public static void main(String[] args) {
-		Graph g = loadGraphML("D:/Workspace/work/poets/dists/n4.graphml");
-		//g.dump();
-		g.printDegreeDistr();
+		DegreeDistr dd = DegreeDistr.loadCsv("test.csv");
+		Graph g = dd.reconstruct(100000);
+		g.getDegreeDistr().printDiff(dd);
+		System.out.println("ASP = "+Alg1.asp(g, false));
+
+		System.out.println("\n\nOriginal:");
+		Graph go = loadGraphML("test.graphml");
+		System.out.println("ASP = "+Alg1.asp(go, false));
 	}
 	
 }
