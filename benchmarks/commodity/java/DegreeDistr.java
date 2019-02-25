@@ -56,7 +56,7 @@ public class DegreeDistr {
 		}
 	}
 	
-	private StubNode degreeWeightedRandom(List<StubNode> pool, Random random) {
+	public StubNode degreeWeightedRandom(List<StubNode> pool, Random random) {
 		int max = 0;
 		for(StubNode s : pool)
 			max += s.remDegree;
@@ -68,7 +68,23 @@ public class DegreeDistr {
 		}
 		return null;
 	}
-	
+
+	public StubNode degreeWeightedRandomFast(List<StubNode> pool, Random random) {
+		int bucketSize = 20;
+		int max = 0;
+		StubNode maxNode = null;
+		int poolSize = pool.size();
+		for(int i=0; i<bucketSize; i++) {
+			StubNode n = pool.get(random.nextInt(poolSize));
+			int d = n.remDegree;
+			if(maxNode==null || d>max) {
+				max = d;
+				maxNode = n;
+			}
+		}
+		return maxNode;
+	}
+
 	public Graph reconstruct(int maxRetries) {
 		LinkedList<StubNode> pool = new LinkedList<>();
 		for(int degree=1; degree<list.size(); degree++) {
@@ -96,6 +112,11 @@ public class DegreeDistr {
 			if(src.remDegree<2 && dst.remDegree<2 && acc.size()<2)
 				continue;
 			
+			if(g.map[src.nodeIndex].isConnectedTo(dst.nodeIndex))
+				continue;
+
+			retries = 0;
+
 			g.map[src.nodeIndex].add(dst.nodeIndex);
 			g.map[dst.nodeIndex].add(src.nodeIndex);
 			

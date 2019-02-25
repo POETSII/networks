@@ -3,6 +3,7 @@ package com.xrbpowered.compute.asp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Random;
@@ -22,12 +23,21 @@ public class Graph {
 			this.edges = new int[nmax];
 		}
 		
-		public void add(int dst) {
+		public boolean isConnectedTo(int dst) {
 			for(int i=0; i<nedges; i++) {
 				if(edges[i]==dst)
-					return;
+					return true;
+			}
+			return false;
+		}
+		
+		public boolean add(int dst) {
+			for(int i=0; i<nedges; i++) {
+				if(edges[i]==dst)
+					return false;
 			}
 			edges[nedges++] = dst;
+			return true;
 		}
 	}
 	
@@ -117,15 +127,43 @@ public class Graph {
 			return null;
 		}
 	}
-	
+
+	public static void saveGraphML(String path, Graph g) {
+		try {
+			PrintStream out = new PrintStream(new File(path));
+			out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			out.println("<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+					+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
+			out.println("<graph id=\"G\" edgedefault=\"undirected\">");
+			
+			for(int i=0; i<g.nnodes; i++)
+				out.printf("\t<node id=\"%06d\"/>\n", i);
+			for(int i=0; i<g.nnodes; i++) {
+				Node n = g.map[i];
+				for(int j=0; j<n.nedges; j++)
+					out.printf("\t<edge source=\"%06d\" target=\"%06d\"/>\n", i, n.edges[j]);
+			}
+			
+			out.println("</graph>\n</graphml>");
+			
+			out.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) {
-		DegreeDistr dd = DegreeDistr.loadCsv("test.csv");
-		Graph g = dd.reconstruct(100000);
+		DegreeDistr dd = DegreeDistr.loadCsv("dists/n4.csv");
+		long t0 = System.currentTimeMillis();
+		Graph g = dd.reconstruct(10);
+		System.out.printf("Elapsed: %d\n", System.currentTimeMillis()-t0);
 		g.getDegreeDistr().printDiff(dd);
 		System.out.println("ASP = "+Alg1.asp(g, false));
+		//saveGraphML("dists/n4_recon.graphml", g);
 
 		System.out.println("\n\nOriginal:");
-		Graph go = loadGraphML("test.graphml");
+		Graph go = loadGraphML("dists/n4.graphml");
 		System.out.println("ASP = "+Alg1.asp(go, false));
 	}
 	
