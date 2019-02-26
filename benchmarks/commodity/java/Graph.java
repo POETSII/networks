@@ -51,6 +51,13 @@ public class Graph {
 			this.map[i] = new Node(nnodes);
 	}
 
+	public int nedges() {
+		int sum = 0;
+		for(int i=0; i<nnodes; i++)
+			sum += map[i].nedges;
+		return sum;
+	}
+	
 	public void dump() {
 		for(int i=0; i<nnodes; i++)
 			for(int j=0; j<map[i].nedges; j++)
